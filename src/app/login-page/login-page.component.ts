@@ -10,7 +10,18 @@ import { AuthService } from '../providers/auth.service';
 })
 export class LoginPageComponent implements OnInit {
 
-  constructor(public authService: AuthService, private router: Router) { }
+  loginActive: Boolean;
+  registerActive: Boolean;
+
+  displayLogin: String;
+  displayRegister: String;
+
+  constructor(public authService: AuthService, private router: Router) {
+    this.loginActive = true;
+    this.registerActive = false;
+    this.displayLogin = "block";
+    this.displayRegister = "none";
+  }
 
   ngOnInit() {
   }
@@ -20,6 +31,38 @@ export class LoginPageComponent implements OnInit {
       console.log(data);
       this.router.navigate(['']);
     });
+  }
+
+  register(userEmail: string, userPassword: string){
+    this.authService.registerUserWithEmailAndPassword(userEmail, userPassword).then(()=>{
+      this.router.navigate(['home']);
+      this.changeToLogin();
+
+    }).catch((error)=> {
+      console.log(error);
+      // vypis o neuspesnosti
+    });
+
+  }
+
+
+  changeToLogin(){
+    console.log("ffjirf");
+    this.loginActive = true;
+    this.registerActive = false;
+
+    this.displayLogin = "block";
+    this.displayRegister = "none";
+  }
+
+  changeToRegister(){
+    console.log("efiefwof");
+
+    this.registerActive = true;
+    this.loginActive = false;
+
+    this.displayLogin = "none";
+    this.displayRegister = "block";
   }
 
 }

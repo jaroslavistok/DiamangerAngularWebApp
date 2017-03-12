@@ -9,9 +9,16 @@ export class AuthService {
 
   }
 
-  // registerUserWithEmailAndPassword(userEmail: string, userPassword: string){
-      // this.angularFire.auth.createUser();
-  // }
+  registerUserWithEmailAndPassword(userEmail: string, userPassword: string){
+      return this.angularFire.auth.createUser({
+          email: userEmail,
+          password: userPassword
+      }).then((user)=> {
+          return this.angularFire.database.object(`/users/${user.uid}`).update({
+              email: userEmail
+          });
+      });
+  }
 
   loginWithEmailAndPassword(userEmail: string, userPassword: string){
       return this.angularFire.auth.login({
