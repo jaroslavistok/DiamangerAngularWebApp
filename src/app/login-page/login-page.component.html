@@ -1,0 +1,8 @@
+<div class="container">
+  <h1>Prihlásiť sa</h1>
+
+
+    <input #userName type="email" placeholder="Email">
+    <input #userPassword type="password" placeholder="Password">
+    <button class="btn btn-default" (click)="login(userName.value, userPassword.value)"> Prihlasit sa </button>
+</div>

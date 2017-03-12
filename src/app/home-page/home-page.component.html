@@ -1,0 +1,17 @@
+<div class="container">
+  <div class="jumbotron">
+    <h1>Welcome</h1>
+    <p><button class="btn btn-default" (click)="logout()">Odhlasit</button> </p>
+  </div>
+</div>
+
+
+<h1>
+  {{title}}
+</h1>
+
+<ul>
+  <li *ngFor="let item of items | async">
+    {{item.$key}}
+  </li>
+</ul>
