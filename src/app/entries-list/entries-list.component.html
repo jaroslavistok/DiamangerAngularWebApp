@@ -14,9 +14,9 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a (click)="this.router.navigate([''])">Úvodná stránka</a></li>
-        <li><a (click)="this.router.navigate(['entries'])" >Záznamy glykémii <span class="sr-only">(current)</span></a></li>
-        <li><a (click)="this.router.navigate(['reminders'])">Reminders</a></li>
+        <li ><a (click)="this.router.navigate([''])">Úvodná stránka</a></li>
+        <li class="active"><a (click)="this.router.navigate(['entries'])">Záznamy glykémii <span class="sr-only">(current)</span></a></li>
+        <li ><a (click)="this.router.navigate(['reminders'])">Reminders</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a (click)="logout()" href="">Odhlásiť</a></li>
@@ -27,6 +27,27 @@
 
 <div class="container">
   <div class="row">
-    <h1>Vitaj</h1>
+    <table class="table">
+      <tr>
+        <th>Carbohydrates</th>
+        <th>Category</th>
+        <th>DateTime</th>
+        <th>FastInsuline</th>
+        <th>SlowInsuline</th>
+        <th>Glucose</th>
+        <th>Note</th>
+      </tr>
+
+      <tr *ngFor="let item of items | async">
+        <td>{{ item.carbs }}</td>
+        <td>{{ item.category }}</td>
+        <td>{{ item.datetime}}</td>
+        <td>{{ item.fastInsuline}}</td>
+        <td>{{ item.slowInsuline}}</td>
+        <td>{{ item.glucoseValue}}</td>
+        <td>{{ item.note}}</td>
+      </tr>
+
+    </table>
   </div>
 </div>

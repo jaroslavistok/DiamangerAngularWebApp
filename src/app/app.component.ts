@@ -16,13 +16,11 @@ export class AppComponent {
 
   private loggedUserName: String;
   private loggedUserEmail: String;
+  private uid: String;
 
 
   title = 'app works!';
-  // items: FirebaseListObservable<any[]>;
-  // constructor(private angularFire: AngularFire){
-  //   this.items = angularFire.database.list('/entries');
-  // }
+
 
   constructor(public authService: AuthService, private router: Router){
     this.authService.angularFire.auth.subscribe(
@@ -32,6 +30,8 @@ export class AppComponent {
             this.router.navigate(['login']);
           } else {
             this.isLoggedIn = true;
+            this.uid = auth.uid;
+
             this.router.navigate(['']);
           }
         }

@@ -17,12 +17,16 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import { HomePageComponent } from './home-page/home-page.component';
 
 import { RouterModule, Routes } from '@angular/router';
+import { EntriesListComponent } from './entries-list/entries-list.component';
+import { RemindersListComponent } from './reminders-list/reminders-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginPageComponent,
-    HomePageComponent
+    HomePageComponent,
+    EntriesListComponent,
+    RemindersListComponent
   ],
   imports: [
     BrowserModule,

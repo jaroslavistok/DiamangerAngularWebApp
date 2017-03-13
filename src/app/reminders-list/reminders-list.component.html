@@ -1,0 +1,57 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">DiabetesManager</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a (click)="this.router.navigate([''])">Úvodná stránka</a></li>
+        <li ><a (click)="this.router.navigate(['entries'])">Záznamy glykémii <span class="sr-only">(current)</span></a></li>
+        <li class="active"><a (click)="this.router.navigate(['reminders'])">Reminders</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a (click)="logout()" href="">Odhlásiť</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container">
+  <div class="row">
+    <h1>Pripomienky</h1>
+  </div>
+
+  <!--<div class="row">-->
+    <!--<table class="table">-->
+      <!--<tr>-->
+        <!--<th>Carbohydrates</th>-->
+        <!--<th>Category</th>-->
+        <!--<th>DateTime</th>-->
+        <!--<th>FastInsuline</th>-->
+        <!--<th>SlowInsuline</th>-->
+        <!--<th>Glucose</th>-->
+        <!--<th>Note</th>-->
+      <!--</tr>-->
+
+      <!--<tr *ngFor="let item of items | async">-->
+        <!--<td>{{ item.carbs }}</td>-->
+        <!--<td>{{ item.category }}</td>-->
+        <!--<td>{{ item.datetime}}</td>-->
+        <!--<td>{{ item.fastInsuline}}</td>-->
+        <!--<td>{{ item.slowInsuline}}</td>-->
+        <!--<td>{{ item.glucoseValue}}</td>-->
+        <!--<td>{{ item.note}}</td>-->
+      <!--</tr>-->
+
+    <!--</table>-->
+  <!--</div>-->
+</div>

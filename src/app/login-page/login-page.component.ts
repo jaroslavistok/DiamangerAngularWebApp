@@ -30,6 +30,8 @@ export class LoginPageComponent implements OnInit {
     this.authService.loginWithEmailAndPassword(userEmail, userPassword).then((data) => {
       console.log(data);
       this.router.navigate(['']);
+    }).catch((error)=> {
+      console.log("Nespravne zadane informacie" + JSON.stringify(error));
     });
   }
 
@@ -37,10 +39,9 @@ export class LoginPageComponent implements OnInit {
     this.authService.registerUserWithEmailAndPassword(userEmail, userPassword).then(()=>{
       this.router.navigate(['home']);
       this.changeToLogin();
-
     }).catch((error)=> {
       console.log(error);
-      // vypis o neuspesnosti
+      console.log("Error: " + JSON.stringify(error));
     });
 
   }
