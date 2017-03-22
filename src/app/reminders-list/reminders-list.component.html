@@ -21,8 +21,8 @@
       <ul class="nav navbar-nav navbar-right">
         <li><a (click)="logout()" href="">Odhlásiť</a></li>
       </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+    </div>
+  </div>
 </nav>
 
 <div class="container">
@@ -30,28 +30,43 @@
     <h1>Pripomienky</h1>
   </div>
 
-  <!--<div class="row">-->
-    <!--<table class="table">-->
-      <!--<tr>-->
-        <!--<th>Carbohydrates</th>-->
-        <!--<th>Category</th>-->
-        <!--<th>DateTime</th>-->
-        <!--<th>FastInsuline</th>-->
-        <!--<th>SlowInsuline</th>-->
-        <!--<th>Glucose</th>-->
-        <!--<th>Note</th>-->
-      <!--</tr>-->
+  <div class="row">
+    <table class="table">
+      <tr>
+        <th>Meno</th>
+        <th>Kategória</th>
+        <th>Čas</th>
+        <th>Stav</th>
+        <th>Zmena</th>
+      </tr>
 
-      <!--<tr *ngFor="let item of items | async">-->
-        <!--<td>{{ item.carbs }}</td>-->
-        <!--<td>{{ item.category }}</td>-->
-        <!--<td>{{ item.datetime}}</td>-->
-        <!--<td>{{ item.fastInsuline}}</td>-->
-        <!--<td>{{ item.slowInsuline}}</td>-->
-        <!--<td>{{ item.glucoseValue}}</td>-->
-        <!--<td>{{ item.note}}</td>-->
-      <!--</tr>-->
+      <tr *ngFor="let item of items | async">
+        <td>{{ item.name }}</td>
+        <td>{{ item.category }}</td>
+        <td>{{ item.alarmTime}}</td>
+        <td>{{ item.active }}</td>
+        <td><button>Zmeniť</button></td>
+      </tr>
 
-    <!--</table>-->
-  <!--</div>-->
+      <tr>
+        <td><input [(ngModel)]="reminder.name" type="text" name="reminder_name" placeholder="Názov: "></td>
+        <td><input [(ngModel)]="reminder.category" type="text" name="reminder_category" placeholder="Kategória: "></td>
+        <td>
+          <input
+                  [(ngModel)]="reminder.alarmTime"
+                  ng2-datetime-picker
+                  time-only="true"
+                  [close-on-select]="false"
+                  date-format="HH:mm"
+                  />
+        </td>
+
+        <!--<td><input [(ngModel)]="reminder.active" type="text" name="reminder_state" placeholder="Stav"></td>-->
+
+        <td><input [(ngModel)]="reminder.active"  type="checkbox"></td>
+        <td><button (click)="addReminder()" name="">Pridať novú pripomienku</button></td>
+      </tr>
+
+    </table>
+  </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 
 
@@ -16,6 +16,7 @@ export class AppComponent {
 
   private loggedUserName: String;
   private loggedUserEmail: String;
+
   private uid: String;
 
 

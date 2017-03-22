@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { Ng2DatetimePickerModule } from 'ng2-datetime-picker';
 
 
 // firebase modules
@@ -33,7 +34,8 @@ import { RemindersListComponent } from './reminders-list/reminders-list.componen
     FormsModule,
     HttpModule,
     AngularFireModule.initializeApp(firebaseConfig),
-    RouterModule.forRoot(routesConfig)
+    RouterModule.forRoot(routesConfig),
+    Ng2DatetimePickerModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]
