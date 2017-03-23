@@ -20,6 +20,8 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { RouterModule, Routes } from '@angular/router';
 import { EntriesListComponent } from './entries-list/entries-list.component';
 import { RemindersListComponent } from './reminders-list/reminders-list.component';
+import { TableComponent } from './table/table.component';
+import { Ng2SmartTableModule } from "ng2-smart-table";
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { RemindersListComponent } from './reminders-list/reminders-list.componen
     LoginPageComponent,
     HomePageComponent,
     EntriesListComponent,
-    RemindersListComponent
+    RemindersListComponent,
+    TableComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -35,7 +39,7 @@ import { RemindersListComponent } from './reminders-list/reminders-list.componen
     HttpModule,
     AngularFireModule.initializeApp(firebaseConfig),
     RouterModule.forRoot(routesConfig),
-    Ng2DatetimePickerModule
+    Ng2DatetimePickerModule, Ng2SmartTableModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

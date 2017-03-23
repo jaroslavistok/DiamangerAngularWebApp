@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { AuthService } from '../providers/auth.service';
 import {FirebaseListObservable, AngularFire, FirebaseObjectObservable} from "angularfire2";
 import { Reminder } from './Reminder';
+// import { Ng2SmartTableModule } from "ng2-smart-table";
+
+
 
 @Component({
   selector: 'app-reminders-list',
@@ -11,10 +14,50 @@ import { Reminder } from './Reminder';
 })
 export class RemindersListComponent implements OnInit {
 
+    settings = {
+        columns: {
+            id: {
+                title: 'ID'
+            },
+            name: {
+                title: 'Full Name'
+            },
+            username: {
+                title: 'User Name'
+            },
+            email: {
+                title: 'Email'
+            }
+        }
+    };
+
+    tableData = [
+        {
+            id: 1,
+            name: "Leanne Graham",
+            username: "Bret",
+            email: "Sincere@april.biz"
+        },
+        {
+            id: 2,
+                name: "Ervin Howell",
+            username: "Antonette",
+            email: "Shanna@melissa.tv"
+        },
+
+        {
+            id: 11,
+                name: "Nicholas DuBuque",
+            username: "Nicholas.Stanton",
+            email: "Rey.Padberg@rosamond.biz"
+        }
+    ];
+
+
   items: FirebaseListObservable<any[]>;
   private uid: String;
 
-  public reminder = new Reminder('', '', '', '', false);
+  public reminder = new Reminder('', '', '', '', false, false);
   public lastReminderId: FirebaseObjectObservable<any>;
 
   addReminder(){

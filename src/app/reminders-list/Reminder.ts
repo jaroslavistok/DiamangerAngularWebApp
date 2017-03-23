@@ -6,6 +6,7 @@ export class Reminder {
         public alarmTime: string,
         public id: string,
         public active: boolean,
+        public status: boolean
     ){}
 
 

@@ -16,7 +16,7 @@
       <ul class="nav navbar-nav">
         <li><a (click)="this.router.navigate([''])">Úvodná stránka</a></li>
         <li ><a (click)="this.router.navigate(['entries'])">Záznamy glykémii <span class="sr-only">(current)</span></a></li>
-        <li class="active"><a (click)="this.router.navigate(['reminders'])">Reminders</a></li>
+        <li class="active"><a (click)="this.router.navigate(['reminders'])">Natstavenie pripomienok</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a (click)="logout()" href="">Odhlásiť</a></li>
@@ -31,42 +31,51 @@
   </div>
 
   <div class="row">
-    <table class="table">
-      <tr>
-        <th>Meno</th>
-        <th>Kategória</th>
-        <th>Čas</th>
-        <th>Stav</th>
-        <th>Zmena</th>
-      </tr>
+    <!--<table class="table">-->
+      <!--<tr>-->
+        <!--<th>Meno</th>-->
+        <!--<th>Kategória</th>-->
+        <!--<th>Čas</th>-->
+        <!--<th>Stav</th>-->
+        <!--<th>Zmena</th>-->
+      <!--</tr>-->
 
-      <tr *ngFor="let item of items | async">
-        <td>{{ item.name }}</td>
-        <td>{{ item.category }}</td>
-        <td>{{ item.alarmTime}}</td>
-        <td>{{ item.active }}</td>
-        <td><button>Zmeniť</button></td>
-      </tr>
+      <!--<tr *ngFor="let item of items | async">-->
+        <!--<td>-->
+          <!--<span>{{ item.name }}</span>-->
+            <!--<input type="text" [(ngModel)]="item.status" value="{{item.status}}" *ngIf="edited">-->
+        <!--</td>-->
+        <!--<td>{{ item.category }}</td>-->
+        <!--<td>{{ item.alarmTime}}</td>-->
+        <!--<td>{{ item.active }}</td>-->
+        <!--<td><button>Zmeniť</button></td>-->
+      <!--</tr>-->
 
-      <tr>
-        <td><input [(ngModel)]="reminder.name" type="text" name="reminder_name" placeholder="Názov: "></td>
-        <td><input [(ngModel)]="reminder.category" type="text" name="reminder_category" placeholder="Kategória: "></td>
-        <td>
-          <input
-                  [(ngModel)]="reminder.alarmTime"
-                  ng2-datetime-picker
-                  time-only="true"
-                  [close-on-select]="false"
-                  date-format="HH:mm"
-                  />
-        </td>
+      <!--<tr>-->
+        <!--<td><input [(ngModel)]="reminder.name" type="text" name="reminder_name" placeholder="Názov: "></td>-->
+        <!--<td><input [(ngModel)]="reminder.category" type="text" name="reminder_category" placeholder="Kategória: "></td>-->
+        <!--<td>-->
+          <!--<input-->
+                  <!--[(ngModel)]="reminder.alarmTime"-->
+                  <!--ng2-datetime-picker-->
+                  <!--time-only="true"-->
+                  <!--[close-on-select]="false"-->
+                  <!--date-format="HH:mm"-->
+                  <!--/>-->
+        <!--</td>-->
 
-        <!--<td><input [(ngModel)]="reminder.active" type="text" name="reminder_state" placeholder="Stav"></td>-->
+        <!--&lt;!&ndash;<td><input [(ngModel)]="reminder.active" type="text" name="reminder_state" placeholder="Stav"></td>&ndash;&gt;-->
 
-        <td><input [(ngModel)]="reminder.active"  type="checkbox"></td>
-        <td><button (click)="addReminder()" name="">Pridať novú pripomienku</button></td>
-      </tr>
+        <!--<td><input [(ngModel)]="reminder.active"  type="checkbox"></td>-->
+        <!--<td><button (click)="addReminder()" name="">Pridať novú pripomienku</button></td>-->
+      <!--</tr>-->
+0
+    <!--</table>-->
 
-    </table>
+
+      <ng2-smart-table [settings]="settings" [source]="tableData"></ng2-smart-table>
+
+
+
   </div>
 </div>
