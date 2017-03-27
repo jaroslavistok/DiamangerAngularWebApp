@@ -69,13 +69,9 @@
         <!--<td><input [(ngModel)]="reminder.active"  type="checkbox"></td>-->
         <!--<td><button (click)="addReminder()" name="">Pridať novú pripomienku</button></td>-->
       <!--</tr>-->
-0
+
     <!--</table>-->
-
-
-      <ng2-smart-table [settings]="settings" [source]="tableData"></ng2-smart-table>
-
-
+      <ng2-smart-table [settings]="settings" [source]="tableData" (createConfirm)="onCreate($event)" (editConfirm)="onEdit($event)" (deleteConfirm)="onDelete($event)"></ng2-smart-table>
 
   </div>
 </div>

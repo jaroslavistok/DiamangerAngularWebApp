@@ -13,7 +13,7 @@
       <ul class="nav navbar-nav">
         <li ><a (click)="this.router.navigate([''])">Úvodná stránka</a></li>
         <li class="active"><a (click)="this.router.navigate(['entries'])">Záznamy glykémii <span class="sr-only">(current)</span></a></li>
-        <li ><a (click)="this.router.navigate(['reminders'])">Reminders</a></li>
+        <li ><a (click)="this.router.navigate(['reminders'])">Pripomienky</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a (click)="logout()" href="">Odhlásiť</a></li>
@@ -27,43 +27,46 @@
     <h1>Záznamy</h1>
   </div>
   <div class="row">
-      <table class="table">
-        <tr>
-          <th>Kategória</th>
-          <th>Dátum a čas</th>
-          <th>Rýchly inzulín</th>
-          <th>Pomalý inzulín</th>
-          <th>Hodnota glykémie</th>
-          <th>Poznámka</th>
-          <th></th>
-        </tr>
 
-        <tr *ngFor="let item of items | async">
-          <td>{{ item.category }}</td>
-          <td>{{ item.datetime}}</td>
-          <td>{{ item.fastInsuline}}</td>
-          <td>{{ item.slowInsuline}}</td>
-          <td>{{ item.glucoseValue}}</td>
-          <td>{{ item.note}}</td>
-          <td><button>Zmeň</button></td>
-        </tr>
+      <ng2-smart-table [settings]="settings" [source]="tableData" (createConfirm)="onCreate($event)" (editConfirm)="onEdit($event)" (deleteConfirm)="onDelete($event)"></ng2-smart-table>
 
-        <tr>
-            <td>
-              <select name="categories" [(ngModel)]="entry.category">
-                <option *ngFor="let category of categories" [ngValue]="category.title">
-                  {{category.title}}
-                </option>
-              </select>
-            </td>
+      <!--<table class="table">-->
+        <!--<tr>-->
+          <!--<th>Kategória</th>-->
+          <!--<th>Dátum a čas</th>-->
+          <!--<th>Rýchly inzulín</th>-->
+          <!--<th>Pomalý inzulín</th>-->
+          <!--<th>Hodnota glykémie</th>-->
+          <!--<th>Poznámka</th>-->
+          <!--<th></th>-->
+        <!--</tr>-->
 
-            <td><input [(ngModel)]="entry.datetime" name="datetime" type="text"></td>
-            <td><input [(ngModel)]="entry.fastInsuline" name="fastInsuline" type="text" placeholder="Rýchly inzulín"></td>
-            <td><input [(ngModel)]="entry.slowInsuline" name="slowInsuline" type="text" placeholder="Pomalý inzulín"></td>
-            <td><input [(ngModel)]="entry.glucoseValue"name="glucoseValue" type="text" placeholder="Glykémia"></td>
-            <td><input [(ngModel)]="entry.note" name="note" type="text" placeholder="Poznámka"></td>
-            <td><button (click)="addValue()">Pridaj</button></td>
-        </tr>
-      </table>
+        <!--<tr *ngFor="let item of items | async">-->
+          <!--<td>{{ item.category }}</td>-->
+          <!--<td>{{ item.datetime}}</td>-->
+          <!--<td>{{ item.fastInsuline}}</td>-->
+          <!--<td>{{ item.slowInsuline}}</td>-->
+          <!--<td>{{ item.glucoseValue}}</td>-->
+          <!--<td>{{ item.note}}</td>-->
+          <!--<td><button>Zmeň</button></td>-->
+        <!--</tr>-->
+
+        <!--<tr>-->
+            <!--<td>-->
+              <!--<select name="categories" [(ngModel)]="entry.category">-->
+                <!--<option *ngFor="let category of categories" [ngValue]="category.title">-->
+                  <!--{{category.title}}-->
+                <!--</option>-->
+              <!--</select>-->
+            <!--</td>-->
+
+            <!--<td><input [(ngModel)]="entry.datetime" name="datetime" type="text"></td>-->
+            <!--<td><input [(ngModel)]="entry.fastInsuline" name="fastInsuline" type="text" placeholder="Rýchly inzulín"></td>-->
+            <!--<td><input [(ngModel)]="entry.slowInsuline" name="slowInsuline" type="text" placeholder="Pomalý inzulín"></td>-->
+            <!--<td><input [(ngModel)]="entry.glucoseValue"name="glucoseValue" type="text" placeholder="Glykémia"></td>-->
+            <!--<td><input [(ngModel)]="entry.note" name="note" type="text" placeholder="Poznámka"></td>-->
+            <!--<td><button (click)="addValue()">Pridaj</button></td>-->
+        <!--</tr>-->
+      <!--</table>-->
   </div>
 </div>

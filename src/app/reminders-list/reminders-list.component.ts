@@ -3,7 +3,9 @@ import { Router } from '@angular/router';
 import { AuthService } from '../providers/auth.service';
 import {FirebaseListObservable, AngularFire, FirebaseObjectObservable} from "angularfire2";
 import { Reminder } from './Reminder';
-// import { Ng2SmartTableModule } from "ng2-smart-table";
+import { Ng2SmartTableModule, LocalDataSource } from "ng2-smart-table";
+import {Observable} from "rxjs";
+import {any} from "codelyzer/util/function";
 
 
 
@@ -13,45 +15,46 @@ import { Reminder } from './Reminder';
   styleUrls: ['./reminders-list.component.css']
 })
 export class RemindersListComponent implements OnInit {
+    source: LocalDataSource;
 
     settings = {
         columns: {
+            active: {
+                title: 'Aktívny'
+            },
+            alarmTime: {
+                title: 'Čas'
+            },
+            category: {
+                title: 'Kategória'
+            },
             id: {
                 title: 'ID'
             },
             name: {
-                title: 'Full Name'
+                title: 'Meno'
             },
-            username: {
-                title: 'User Name'
-            },
-            email: {
-                title: 'Email'
-            }
+        },
+        pager : {
+            display : true,
+            perPage:50
+        },
+
+        mode: 'inline',
+
+
+        delete : {
+            confirmDelete: true
+        },
+        edit: {
+            confirmSave: true
+        },
+        add : {
+            confirmCreate: true
         }
     };
 
-    tableData = [
-        {
-            id: 1,
-            name: "Leanne Graham",
-            username: "Bret",
-            email: "Sincere@april.biz"
-        },
-        {
-            id: 2,
-                name: "Ervin Howell",
-            username: "Antonette",
-            email: "Shanna@melissa.tv"
-        },
-
-        {
-            id: 11,
-                name: "Nicholas DuBuque",
-            username: "Nicholas.Stanton",
-            email: "Rey.Padberg@rosamond.biz"
-        }
-    ];
+    tableData :LocalDataSource;
 
 
   items: FirebaseListObservable<any[]>;
@@ -74,19 +77,46 @@ export class RemindersListComponent implements OnInit {
           } else {
             this.uid = auth.uid;
             this.items = angularFire.database.list('/users/' + this.uid + "/reminders");
+
+            this.items.subscribe(snapshot => {
+                this.tableData = new LocalDataSource(snapshot);
+            });
+
             this.lastReminderId = angularFire.database.object('/users/'+ this.uid);
             this.lastReminderId.subscribe(snapshot => {
 
               if (snapshot.last_reminder_id == null){
                 this.reminder.id = "0";
               } else {
-                this.reminder.id = ""+(parseInt(snapshot.last_reminder_id) + 1)+"";
+                this.reminder.id = "" + (parseInt(snapshot.last_reminder_id) + 1) + "";
               }
 
             });
           }
         }
     );
+  }
+
+
+  onCreate(event){
+      console.log("oncreate");
+      console.log(event.newData);
+      this.items.push(event.newData);
+      return event.confirm.resolve(event.newData);
+  }
+
+  onEdit(event){
+      console.log("onedit");
+      console.log(event.data);
+      this.items.update(event.data.$key, event.newData);
+      return event.confirm.resolve(event.data);
+  }
+
+  onDelete(event){
+      console.log("ondelete");
+      console.log(event.data);
+      this.items.remove(event.data);
+      return event.confirm.resolve(event.data);
   }
 
   ngOnInit() {
