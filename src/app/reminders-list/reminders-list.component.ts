@@ -4,10 +4,6 @@ import { AuthService } from '../providers/auth.service';
 import {FirebaseListObservable, AngularFire, FirebaseObjectObservable} from "angularfire2";
 import { Reminder } from './Reminder';
 import { Ng2SmartTableModule, LocalDataSource } from "ng2-smart-table";
-import {Observable} from "rxjs";
-import {any} from "codelyzer/util/function";
-
-
 
 @Component({
   selector: 'app-reminders-list',
@@ -20,7 +16,11 @@ export class RemindersListComponent implements OnInit {
     settings = {
         columns: {
             active: {
-                title: 'Aktívny'
+                title: 'Aktívny',
+                editor: {
+                    type: 'checkbox'
+                },
+
             },
             alarmTime: {
                 title: 'Čas'
@@ -29,7 +29,8 @@ export class RemindersListComponent implements OnInit {
                 title: 'Kategória'
             },
             id: {
-                title: 'ID'
+                title: 'ID',
+                editable: false
             },
             name: {
                 title: 'Meno'
@@ -60,7 +61,7 @@ export class RemindersListComponent implements OnInit {
   items: FirebaseListObservable<any[]>;
   private uid: String;
 
-  public reminder = new Reminder('', '', '', '', false, false);
+  public reminder = new Reminder('', '', '', '', false);
   public lastReminderId: FirebaseObjectObservable<any>;
 
   addReminder(){
@@ -108,7 +109,15 @@ export class RemindersListComponent implements OnInit {
   onEdit(event){
       console.log("onedit");
       console.log(event.data);
-      this.items.update(event.data.$key, event.newData);
+      console.log(event.newData);
+      let cat = {
+          category: event.newData.category,
+          active: event.newData.active,
+          alarmTime: event.newData.alarmTime,
+          name: event.newData.name
+      };
+
+      this.items.update(event.data.$key, cat);
       return event.confirm.resolve(event.data);
   }
 

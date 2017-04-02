@@ -1,6 +1,5 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
         <span class="sr-only">Toggle navigation</span>
@@ -11,12 +10,11 @@
       <a class="navbar-brand" href="#">DiabetesManager</a>
     </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li><a (click)="this.router.navigate([''])">Úvodná stránka</a></li>
         <li ><a (click)="this.router.navigate(['entries'])">Záznamy glykémii <span class="sr-only">(current)</span></a></li>
-        <li class="active"><a (click)="this.router.navigate(['reminders'])">Natstavenie pripomienok</a></li>
+        <li class="active"><a (click)="this.router.navigate(['reminders'])">Nastavenie pripomienok</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a (click)="logout()" href="">Odhlásiť</a></li>
@@ -27,51 +25,11 @@
 
 <div class="container">
   <div class="row">
-    <h1>Pripomienky</h1>
+    <h1>Zoznam pripomienok</h1>
   </div>
 
+
   <div class="row">
-    <!--<table class="table">-->
-      <!--<tr>-->
-        <!--<th>Meno</th>-->
-        <!--<th>Kategória</th>-->
-        <!--<th>Čas</th>-->
-        <!--<th>Stav</th>-->
-        <!--<th>Zmena</th>-->
-      <!--</tr>-->
-
-      <!--<tr *ngFor="let item of items | async">-->
-        <!--<td>-->
-          <!--<span>{{ item.name }}</span>-->
-            <!--<input type="text" [(ngModel)]="item.status" value="{{item.status}}" *ngIf="edited">-->
-        <!--</td>-->
-        <!--<td>{{ item.category }}</td>-->
-        <!--<td>{{ item.alarmTime}}</td>-->
-        <!--<td>{{ item.active }}</td>-->
-        <!--<td><button>Zmeniť</button></td>-->
-      <!--</tr>-->
-
-      <!--<tr>-->
-        <!--<td><input [(ngModel)]="reminder.name" type="text" name="reminder_name" placeholder="Názov: "></td>-->
-        <!--<td><input [(ngModel)]="reminder.category" type="text" name="reminder_category" placeholder="Kategória: "></td>-->
-        <!--<td>-->
-          <!--<input-->
-                  <!--[(ngModel)]="reminder.alarmTime"-->
-                  <!--ng2-datetime-picker-->
-                  <!--time-only="true"-->
-                  <!--[close-on-select]="false"-->
-                  <!--date-format="HH:mm"-->
-                  <!--/>-->
-        <!--</td>-->
-
-        <!--&lt;!&ndash;<td><input [(ngModel)]="reminder.active" type="text" name="reminder_state" placeholder="Stav"></td>&ndash;&gt;-->
-
-        <!--<td><input [(ngModel)]="reminder.active"  type="checkbox"></td>-->
-        <!--<td><button (click)="addReminder()" name="">Pridať novú pripomienku</button></td>-->
-      <!--</tr>-->
-
-    <!--</table>-->
-      <ng2-smart-table [settings]="settings" [source]="tableData" (createConfirm)="onCreate($event)" (editConfirm)="onEdit($event)" (deleteConfirm)="onDelete($event)"></ng2-smart-table>
-
+      <ng2-smart-table class="reminders_table" [settings]="settings" [source]="tableData" (createConfirm)="onCreate($event)" (editConfirm)="onEdit($event)" (deleteConfirm)="onDelete($event)"></ng2-smart-table>
   </div>
 </div>
