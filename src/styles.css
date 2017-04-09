@@ -21,8 +21,6 @@
     color: #666;
     font-weight: bold;
     font-size: 15px;
-    /*-webkit-transition: all 0.1s linear;*/
-    /*-moz-transition: all 0.1s linear;*/
     transition: all 0.1s linear;
 }
 .panel-login>.panel-heading a.active{
@@ -99,6 +97,18 @@
     color: #fff;
     background-color: #1CA347;
     border-color: #1CA347;
+}
+
+
+.ng2-smart-title {
+    font-size: 20px;
+}
+.ng2-smart-action {
+    font-size: 15px;
+}
+
+table-cell-view-mode div {
+    font-size: 15px;
 }
 
   
