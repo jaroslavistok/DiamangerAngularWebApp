@@ -11,7 +11,6 @@ import { Ng2SmartTableModule, LocalDataSource } from "ng2-smart-table";
   styleUrls: ['./reminders-list.component.css']
 })
 export class RemindersListComponent implements OnInit {
-    source: LocalDataSource;
 
     settings = {
         columns: {
@@ -60,6 +59,7 @@ export class RemindersListComponent implements OnInit {
 
   items: FirebaseListObservable<any[]>;
   private uid: String;
+  private lastReminderIdValue: string;
 
   public reminder = new Reminder('', '', '', '', false);
   public lastReminderId: FirebaseObjectObservable<any>;
@@ -85,45 +85,35 @@ export class RemindersListComponent implements OnInit {
 
             this.lastReminderId = angularFire.database.object('/users/'+ this.uid);
             this.lastReminderId.subscribe(snapshot => {
-
-              if (snapshot.last_reminder_id == null){
-                this.reminder.id = "0";
-              } else {
-                this.reminder.id = "" + (parseInt(snapshot.last_reminder_id) + 1) + "";
-              }
-
+              this.lastReminderIdValue = snapshot.last_reminder_id;
             });
+
           }
         }
     );
   }
 
-
   onCreate(event){
-      console.log("oncreate");
-      console.log(event.newData);
+      let newId = parseInt(this.lastReminderIdValue)+1;
+      event.newData.id = newId.toString();
+      this.lastReminderId.update({'last_reminder_id': event.newData.id.toString() });
       this.items.push(event.newData);
       return event.confirm.resolve(event.newData);
   }
 
   onEdit(event){
-      console.log("onedit");
-      console.log(event.data);
-      console.log(event.newData);
-      let cat = {
+      let editedReminder = {
           category: event.newData.category,
           active: event.newData.active,
           alarmTime: event.newData.alarmTime,
           name: event.newData.name
       };
 
-      this.items.update(event.data.$key, cat);
+      this.items.update(event.data.$key, editedReminder);
       return event.confirm.resolve(event.data);
   }
 
   onDelete(event){
-      console.log("ondelete");
-      console.log(event.data);
       this.items.remove(event.data);
       return event.confirm.resolve(event.data);
   }
@@ -135,5 +125,4 @@ export class RemindersListComponent implements OnInit {
     this.authService.logout();
     this.router.navigate(['login']);
   }
-
 }
