@@ -5,16 +5,17 @@ import {FirebaseListObservable, AngularFire, FirebaseObjectObservable} from "ang
 import {Entry} from "./Entry";
 import {DateFormatter} from "@angular/common/src/pipes/intl";
 import {LocalDataSource} from "ng2-smart-table";
+import DateTimeFormatOptions = Intl.DateTimeFormatOptions;
 
 const CATEGORIES = [
-    {id: 1, title: 'Ráno'},
-    {id: 2, title: 'Desiata'},
-    {id: 3, title: 'Obed'},
-    {id: 4, title: 'Olovrant'},
-    {id: 5, title: 'Večera'},
-    {id: 6, title: 'Druhá večera'},
-    {id: 7, title: 'Noc'},
-    {id: 8, title: 'Ostatné'}
+    {value: 'Ráno', title: 'Ráno'},
+    {value: 'Desiata', title: 'Desiata'},
+    {value: 'Obed', title: 'Obed'},
+    {value: 'Olovrant', title: 'Olovrant'},
+    {value: 'Večera', title: 'Večera'},
+    {value: 'Druhá večera', title: 'Druhá večera'},
+    {value: 'Noc', title: 'Noc'},
+    {value: 'Ostatné', title: 'Ostatné'}
 ];
 
 
@@ -35,13 +36,22 @@ export class EntriesListComponent implements OnInit {
 
     settings = {
         columns: {
-            carbs: {
-                title: 'Cukor'
+            glucoseValue: {
+                title: "Hodnota glykémie"
             },
             category: {
-                title: 'Kategória'
+                title: 'Kategória',
+                editor: {
+                    type: 'list',
+                    config: {
+                        list: CATEGORIES
+                    }
+                }
             },
-            datetime: {
+            date: {
+                title: 'Dátum',
+            },
+            time: {
                 title: 'Čas'
             },
             fastInsuline: {
@@ -50,8 +60,8 @@ export class EntriesListComponent implements OnInit {
             slowInsuline: {
                 title: 'Pomalý inzulín'
             },
-            glucoseValue: {
-                title: "Hodnota glykémie"
+            note: {
+                title: 'Poznámka'
             }
         },
         pager: {
@@ -100,9 +110,28 @@ export class EntriesListComponent implements OnInit {
         );
     }
 
+
+    getCurrentTime(){
+        let date = new Date();
+        return date.toLocaleTimeString('sk', {hour: '2-digit', minute:'2-digit'});
+    }
+
+    getTodayDate() {
+        let date = new Date();
+        return date.toLocaleDateString('sk');
+    }
+
+
     onCreate(event) {
         console.log("oncreate");
         console.log(event.newData);
+
+        if (event.newData.time != null) {
+            event.newData.time = this.getCurrentTime();
+        }
+        if (event.newData.date != null) {
+            event.newData.date = this.getTodayDate();
+        }
         this.items.push(event.newData);
         return event.confirm.resolve(event.newData);
     }
@@ -110,17 +139,17 @@ export class EntriesListComponent implements OnInit {
     onEdit(event) {
         console.log("onedit");
         console.log(event.data);
-        let cat = {
+        let editedEntry = {
             category: event.newData.category,
-            dateTime: event.newData.datetime,
+            date: event.newData.date,
+            time: event.newData.time,
             fastInsuline: event.newData.fastInsuline,
             slowInsuline: event.newData.slowInsuline,
             glucoseValue: event.newData.glucoseValue,
-            carbs: event.newData.carbs
         };
 
-        this.items.update(event.data.$key, cat);
-        this.items.update(event.data.$key, cat);
+        this.items.update(event.data.$key, editedEntry);
+        this.items.update(event.data.$key, editedEntry);
         return event.confirm.resolve(event.data);
     }
 
