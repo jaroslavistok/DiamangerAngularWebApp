@@ -22,6 +22,7 @@ import { EntriesListComponent } from './entries-list/entries-list.component';
 import { RemindersListComponent } from './reminders-list/reminders-list.component';
 import { TableComponent } from './table/table.component';
 import { Ng2SmartTableModule } from "ng2-smart-table";
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -39,9 +40,9 @@ import { Ng2SmartTableModule } from "ng2-smart-table";
     HttpModule,
     AngularFireModule.initializeApp(firebaseConfig),
     RouterModule.forRoot(routesConfig),
-    Ng2DatetimePickerModule, Ng2SmartTableModule
+    Ng2DatetimePickerModule, Ng2SmartTableModule, ChartsModule
   ],
   providers: [AuthService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
