@@ -23,8 +23,31 @@
   </div>
 </nav>
 
-<div class="container">
-  <div class="row">
-    <h1>Vitaj</h1>
-  </div>
+<!-- Chart JS for graphs -->
+<div class="container" *ngIf="dataLoaded">
+    <div class="col-md-6">
+        <div style="display: block;">
+            <canvas baseChart width="400" height="400"
+                    [datasets]="lineChartData"
+                    [labels]="lineChartMonthDaysLabels"
+                    [options]="lineChartOptions"
+                    [colors]="lineChartColors"
+                    [legend]="lineChartLegend"
+                    [chartType]="lineChartType"
+                    (chartHover)="chartHovered($event)"
+                    (chartClick)="chartClicked($event)"></canvas>
+        </div>
+    </div>
+    <div class="col-md-6" style="margin-bottom: 10px">
+        <table class="table table-responsive table-condensed">
+            <tr>
+                <th *ngFor="let label of lineChartMontsLabels">{{label}}</th>
+            </tr>
+            <tr *ngFor="let d of lineChartData">
+                <td *ngFor="let label of lineChartMontsLabels; let j=index">{{d && d.data[j]}}</td>
+            </tr>
+        </table>
+        <button (click)="randomize()">CLICK</button>
+    </div>
 </div>
+
