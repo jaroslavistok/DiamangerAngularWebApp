@@ -111,4 +111,16 @@ table-cell-view-mode div {
     font-size: 15px;
 }
 
+.ng2-smart-action.ng2-smart-action-edit-edit{
+    margin-right: 15px;
+}
+
+.ng2-smart-action.ng2-smart-action-edit-save{
+    margin-right: 15px;
+}
+
+.ng2-smart-action.ng2-smart-action-add-create {
+    margin-right: 15px;
+}
+
   
