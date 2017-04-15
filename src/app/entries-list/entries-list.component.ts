@@ -35,6 +35,9 @@ export class EntriesListComponent implements OnInit {
     public categories = CATEGORIES;
 
     settings = {
+        actions: {
+            columnTitle: 'Akcie'
+        },
         columns: {
             glucoseValue: {
                 title: "Hodnota glykémie"
@@ -73,13 +76,20 @@ export class EntriesListComponent implements OnInit {
 
 
         delete: {
-            confirmDelete: true
+            confirmDelete: true,
+            deleteButtonContent: "Vymazať"
         },
         edit: {
-            confirmSave: true
+            confirmSave: true,
+            editButtonContent: 'Zmeniť',
+            saveButtonContent: "Uložiť",
+            cancelButtonContent: "Zrušiť"
         },
         add: {
-            confirmCreate: true
+            confirmCreate: true,
+            addButtonContent: 'Pridať',
+            createButtonContent: 'Vytvoriť',
+            cancelButtonContent: 'Zrušiť'
         }
     };
 

@@ -4,18 +4,33 @@ import { AuthService } from '../providers/auth.service';
 import {FirebaseListObservable, AngularFire, FirebaseObjectObservable} from "angularfire2";
 import { Reminder } from './Reminder';
 import { Ng2SmartTableModule, LocalDataSource } from "ng2-smart-table";
+import {CheckBoxComponentComponent} from "../check-box-component/check-box-component.component";
 
 @Component({
   selector: 'app-reminders-list',
   templateUrl: './reminders-list.component.html',
-  styleUrls: ['./reminders-list.component.css']
+  styleUrls: ['./reminders-list.component.css'],
+    entryComponents: [
+        CheckBoxComponentComponent
+    ]
 })
 export class RemindersListComponent implements OnInit {
 
     settings = {
+        actions: {
+            columnTitle: 'Akcie'
+        },
         columns: {
             active: {
                 title: 'Aktívny',
+
+                type: 'custom',
+                renderComponent: CheckBoxComponentComponent,
+
+                filter: {
+                    type: 'checkbox'
+                },
+
                 editor: {
                     type: 'checkbox'
                 },
@@ -44,13 +59,20 @@ export class RemindersListComponent implements OnInit {
 
 
         delete : {
-            confirmDelete: true
+            confirmDelete: true,
+            deleteButtonContent: "Vymazať"
         },
         edit: {
-            confirmSave: true
+            confirmSave: true,
+            editButtonContent: 'Zmeniť',
+            saveButtonContent: "Uložiť",
+            cancelButtonContent: "Zrušiť"
         },
         add : {
-            confirmCreate: true
+            confirmCreate: true,
+            addButtonContent: 'Pridať',
+            createButtonContent: 'Vytvoriť',
+            cancelButtonContent: 'Zrušiť'
         }
     };
 
@@ -101,16 +123,63 @@ export class RemindersListComponent implements OnInit {
       return event.confirm.resolve(event.newData);
   }
 
-  onEdit(event){
-      let editedReminder = {
-          category: event.newData.category,
-          active: event.newData.active,
-          alarmTime: event.newData.alarmTime,
-          name: event.newData.name
-      };
+  validateReminderData(reminderData){
+  /*public name: string,
+          public category: string,
+          public alarmTime: string,
+          public id: string,
+          public active: boolean,*/
+      var valid :boolean = true;
+      if (reminderData.name.length < 1){
+          valid = false
+      }
+      if (reminderData.category.length < 1){
+          valid = false;
+      }
 
-      this.items.update(event.data.$key, editedReminder);
-      return event.confirm.resolve(event.data);
+
+
+
+
+
+  }
+
+  validateTime(time){
+      var hoursAndMinutes = time.split(':');
+      var hours = parseInt(hoursAndMinutes[0]);
+      var minutes = parseInt(hoursAndMinutes[1]);
+
+      console.log("hours: " + hours);
+      console.log("minutes: "+ minutes);
+
+      if (hours < 0 || hours > 24){
+          return false;
+      }
+      if (minutes < 0 || minutes > 59){
+          return false;
+      }
+  }
+
+  onEdit(event){
+
+      window.alert("Bad data");
+
+      return event.confirm.reject();
+
+      // let editedReminder = {
+      //     category: event.newData.category,
+      //     active: event.newData.active,
+      //     alarmTime: event.newData.alarmTime,
+      //     name: event.newData.name
+      // };
+      //
+      // this.items.update(event.data.$key, editedReminder);
+      //
+      // console.log("on update");
+
+
+      // return event.confirm.resolve(event.data);
+
   }
 
   onDelete(event){
