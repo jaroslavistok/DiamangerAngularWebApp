@@ -22,6 +22,7 @@
     </div>
   </div>
 </nav>
+<button (click)="dailyData()">CLICK</button>
 
 <!-- Chart JS for graphs -->
 <div class="container" *ngIf="dataLoaded">
@@ -47,7 +48,7 @@
                 <td *ngFor="let label of lineChartMontsLabels; let j=index">{{d && d.data[j]}}</td>
             </tr>
         </table>
-        <button (click)="randomize()">CLICK</button>
+        <button (click)="dailyData()">CLICK</button>
     </div>
 </div>
 

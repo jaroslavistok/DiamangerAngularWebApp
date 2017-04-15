@@ -23,6 +23,8 @@ import { RemindersListComponent } from './reminders-list/reminders-list.componen
 import { TableComponent } from './table/table.component';
 import { Ng2SmartTableModule } from "ng2-smart-table";
 import { ChartsModule } from 'ng2-charts';
+import { CheckBoxComponentComponent } from './check-box-component/check-box-component.component';
+import { GraphComponent } from './graph/graph.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +34,8 @@ import { ChartsModule } from 'ng2-charts';
     EntriesListComponent,
     RemindersListComponent,
     TableComponent,
+    CheckBoxComponentComponent,
+    GraphComponent,
 
   ],
   imports: [

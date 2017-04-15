@@ -28,13 +28,14 @@ export class HomePageComponent implements OnInit {
         }
     }
 
-
     public dailyData() {
         this.items.subscribe(snapshot => {
             var items = [];
 
             snapshot.forEach(item => {
                 items.push(parseInt(item.glucoseValue));
+                console.log(item.glucoseValue);
+                console.log("deefjbe");
             });
 
             var data = {data: items, label: 'Test 1'};
@@ -81,6 +82,7 @@ export class HomePageComponent implements OnInit {
     public lineChartLegend: boolean = true;
     public lineChartType: string = 'line';
 
+
     public randomize(): void {
         let _lineChartData: Array<any> = new Array(this.lineChartData.length);
         for (let i = 0; i < this.lineChartData.length; i++) {
@@ -114,20 +116,18 @@ export class HomePageComponent implements OnInit {
                     this.router.navigate(['login']);
                 } else {
                     this.uid = auth.uid;
+                    this.dataLoaded = false;
+                    this.items = angularFire.database.list('/users/' + this.uid + "/items");
+                    this.dailyData();
+
                 }
             }
         );
-
-
-        this.items = angularFire.database.list('/users/' + this.uid + "/items");
-
-        this.dataLoaded = false;
-
         this.populateMonthDaysLabels();
-        this.dailyData();
     }
 
     ngOnInit() {
+
     }
 
     logout() {
