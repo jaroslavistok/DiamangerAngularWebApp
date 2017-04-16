@@ -123,4 +123,13 @@ table-cell-view-mode div {
     margin-right: 15px;
 }
 
+.error-message {
+    text-align: center;
+    font-weight: bold;
+    font-size: 15px;
+    color: crimson;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
   
