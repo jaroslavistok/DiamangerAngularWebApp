@@ -6,6 +6,7 @@ import {Entry} from "./Entry";
 import {DateFormatter} from "@angular/common/src/pipes/intl";
 import {LocalDataSource} from "ng2-smart-table";
 import DateTimeFormatOptions = Intl.DateTimeFormatOptions;
+import {isNumeric} from "rxjs/util/isNumeric";
 
 const CATEGORIES = [
     {value: 'Ráno', title: 'Ráno'},
@@ -94,6 +95,7 @@ export class EntriesListComponent implements OnInit {
     };
 
     tableData: LocalDataSource;
+    public errorMessage: string = "";
 
 
     addValue() {
@@ -133,41 +135,49 @@ export class EntriesListComponent implements OnInit {
 
 
     onCreate(event) {
-        console.log("oncreate");
-        console.log(event.newData);
+        if (this.validateEntryData(event.newData)) {
+            if (event.newData.time != null) {
+                event.newData.time = this.getCurrentTime();
+            }
+            if (event.newData.date != null) {
+                event.newData.date = this.getTodayDate();
+            }
+            this.items.push(event.newData);
 
-        if (event.newData.time != null) {
-            event.newData.time = this.getCurrentTime();
+            this.errorMessage = "";
+            return event.confirm.resolve(event.newData);
         }
-        if (event.newData.date != null) {
-            event.newData.date = this.getTodayDate();
-        }
-        this.items.push(event.newData);
-        return event.confirm.resolve(event.newData);
+
+        return event.confirm.reject();
     }
 
     onEdit(event) {
-        console.log("onedit");
-        console.log(event.data);
-        let editedEntry = {
-            category: event.newData.category,
-            date: event.newData.date,
-            time: event.newData.time,
-            fastInsuline: event.newData.fastInsuline,
-            slowInsuline: event.newData.slowInsuline,
-            glucoseValue: event.newData.glucoseValue,
-        };
+        console.log(event.newData);
+        if (this.validateEntryData(event.newData)) {
 
-        this.items.update(event.data.$key, editedEntry);
-        this.items.update(event.data.$key, editedEntry);
-        return event.confirm.resolve(event.data);
+            let editedEntry = {
+                category: event.newData.category,
+                date: event.newData.date,
+                time: event.newData.time,
+                fastInsuline: event.newData.fastInsuline,
+                slowInsuline: event.newData.slowInsuline,
+                glucoseValue: event.newData.glucoseValue,
+            };
+
+            this.items.update(event.data.$key, editedEntry);
+            this.items.update(event.data.$key, editedEntry);
+            return event.confirm.resolve(event.data);
+        }
+
+        return event.confirm.reject();
     }
 
     onDelete(event) {
-        console.log("ondelete");
-        console.log(event.data);
-        this.items.remove(event.data);
-        return event.confirm.resolve(event.data);
+        if (window.confirm("Prajete si skutocne zaznam? ")) {
+            this.items.remove(event.data);
+            return event.confirm.resolve(event.data);
+        }
+        return event.confirm.reject();
     }
 
     ngOnInit() {
@@ -176,6 +186,76 @@ export class EntriesListComponent implements OnInit {
     logout() {
         this.authService.logout();
         this.router.navigate(['login']);
+    }
+
+    private validateEntryData(entry) {
+        var isValid = true;
+        if (entry.category.length < 1){
+            this.errorMessage = "Kategoria nesmie byt prazdna!";
+            isValid = false;
+        }
+
+        if (!isNumeric(entry.fastInsuline) && entry.fastInsuline.length > 0){
+            this.errorMessage = "Hodnota rychleho inzulinu musi byt cislo!";
+            isValid = false;
+        }
+        if (!isNumeric(entry.slowInsuline) && entry.slowInsuline.length > 0){
+            this.errorMessage = "Hodnota pomaleho inzulinu musi byt cislo!";
+            isValid = false;
+        }
+        if (!isNumeric(entry.glucoseValue) && entry.glucoseValue.length > 0){
+            this.errorMessage = "Hodnota glykemie musi byt cislo";
+            isValid = false;
+        }
+        if (this.validateTime(entry.time)){
+            this.errorMessage = "Zadany nespravny cas HH:MM";
+            isValid = false;
+        }
+        if (this.validateDate(entry.date)){
+            this.errorMessage = "Zadany nespravny datum DD.MM.YYYY";
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    private validateTime(time) {
+        let hoursAndMinutes = time.split(':');
+        let hours = parseInt(hoursAndMinutes[0]);
+        let minutes = parseInt(hoursAndMinutes[1]);
+        if (!isNumeric(hoursAndMinutes[0]) || !isNumeric(hoursAndMinutes[1])){
+            return false;
+        }
+        if (hours < 0 || hours > 24) {
+            return false;
+        }
+        if (minutes < 0 || minutes > 59) {
+            return false;
+        }
+        return true;
+    }
+
+    private validateDate(date) {
+        let dateParts = date.split('.');
+        let day = parseInt(dateParts[0]);
+        let month = parseInt(dateParts[1]);
+        let year = parseInt(dateParts[2]);
+
+        if (!isNumeric(dateParts[0].trim()) || !isNumeric(dateParts[1].trim()) || !isNumeric(dateParts[2].trim())){
+            return false;
+        }
+
+        if (day < 0 || day > 31){
+            return false;
+        }
+        if (month < 1 || month > 12){
+            return false;
+        }
+        if (year < 2000){
+            return false;
+        }
+
+        return true;
     }
 }
 
