@@ -162,6 +162,7 @@ export class EntriesListComponent implements OnInit {
                 fastInsuline: event.newData.fastInsuline,
                 slowInsuline: event.newData.slowInsuline,
                 glucoseValue: event.newData.glucoseValue,
+                note: event.newData.note
             };
 
             this.items.update(event.data.$key, editedEntry);
@@ -207,11 +208,11 @@ export class EntriesListComponent implements OnInit {
             this.errorMessage = "Hodnota glykemie musi byt cislo";
             isValid = false;
         }
-        if (this.validateTime(entry.time)){
+        if (!this.validateTime(entry.time)){
             this.errorMessage = "Zadany nespravny cas HH:MM";
             isValid = false;
         }
-        if (this.validateDate(entry.date)){
+        if (!this.validateDate(entry.date)){
             this.errorMessage = "Zadany nespravny datum DD.MM.YYYY";
             isValid = false;
         }
@@ -242,16 +243,21 @@ export class EntriesListComponent implements OnInit {
         let year = parseInt(dateParts[2]);
 
         if (!isNumeric(dateParts[0].trim()) || !isNumeric(dateParts[1].trim()) || !isNumeric(dateParts[2].trim())){
+            console.log("fomat");
             return false;
         }
 
+
         if (day < 0 || day > 31){
+            console.log("day");
             return false;
         }
         if (month < 1 || month > 12){
+            console.log("month");
             return false;
         }
         if (year < 2000){
+            console.log("year");
             return false;
         }
 
