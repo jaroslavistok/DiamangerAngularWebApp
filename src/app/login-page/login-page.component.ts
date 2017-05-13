@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 
 import {Router} from '@angular/router';
 import {AuthService} from '../providers/auth.service';
+import {AngularFire} from "angularfire2";
 
 @Component({
     selector: 'app-login-page',
@@ -16,7 +17,7 @@ export class LoginPageComponent implements OnInit {
     displayRegister: String;
     errorMessage: String;
 
-    constructor(public authService: AuthService, private router: Router) {
+    constructor(private angularFire: AngularFire, public authService: AuthService, private router: Router) {
         this.loginActive = true;
         this.registerActive = false;
         this.displayLogin = "block";
@@ -28,10 +29,22 @@ export class LoginPageComponent implements OnInit {
     ngOnInit() {
     }
 
-    login(userEmail: string, userPassword: string) {
+    login(userEmail: string, userPassword: string, adminCode: string) {
         this.authService.loginWithEmailAndPassword(userEmail, userPassword).then((data) => {
-            console.log(data);
-            this.router.navigate(['']);
+            let users = this.angularFire.database.object('/users/'+ data.uid);
+            let usersToUpdate = this.angularFire.database.object('/users/'+ data.uid);
+
+            users.subscribe(snapshot => {
+                if (adminCode == "") {
+                    usersToUpdate.update({ admin: false});
+                } else if (adminCode == snapshot.admin_code) {
+                    usersToUpdate.update({ admin: true });
+                } else {
+                    usersToUpdate.update({ admin: false});
+                }
+            });
+
+
         }).catch((error) => {
             this.setErrorMessage(error);
         });
@@ -53,6 +66,8 @@ export class LoginPageComponent implements OnInit {
             this.errorMessage = "Nesprávne zadaný prihlasovací email";
         } else if (error.code == "auth/weak-password") {
             this.errorMessage = "Slabé heslo";
+        } else if (error == 'wrong_pin') {
+            this.errorMessage = "Nespraven zadany PIN";
         } else {
             this.errorMessage = "Nesprávne zadané prihlasovacie údaje";
         }

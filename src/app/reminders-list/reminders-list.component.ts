@@ -19,6 +19,14 @@ import {isNumeric} from "rxjs/util/isNumeric";
 })
 export class RemindersListComponent implements OnInit {
 
+    admincode = "";
+
+    becomeAdmin(value){
+        if (this.admin == this.admincode) {
+            console.log("ok");
+        }
+    }
+
     settings = {
         actions: {
             columnTitle: 'Akcie'
@@ -85,6 +93,8 @@ export class RemindersListComponent implements OnInit {
     items: FirebaseListObservable<any[]>;
     private uid: String;
     private lastReminderIdValue: string;
+    private admin : string;
+
 
     public reminder = new Reminder('', '', '', '', false);
     public lastReminderId: FirebaseObjectObservable<any>;
@@ -110,6 +120,7 @@ export class RemindersListComponent implements OnInit {
 
                     this.lastReminderId = angularFire.database.object('/users/' + this.uid);
                     this.lastReminderId.subscribe(snapshot => {
+                        this.admin = snapshot.admin_code;
                         this.lastReminderIdValue = snapshot.last_reminder_id;
                     });
 

@@ -32,6 +32,12 @@ export class AuthService {
   }
 
   logout(){
+
+      this.angularFire.auth.subscribe((auth) => {
+          let users = this.angularFire.database.object('/users/'+ auth.uid);
+          users.update({admin: false});
+      });
+
       return this.angularFire.auth.logout();
   }
 

@@ -32,7 +32,6 @@ export class AppComponent {
           } else {
             this.isLoggedIn = true;
             this.uid = auth.uid;
-
             this.router.navigate(['']);
           }
         }

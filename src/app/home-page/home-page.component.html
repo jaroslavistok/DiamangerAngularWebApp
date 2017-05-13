@@ -48,6 +48,9 @@
                 <td *ngFor="let label of lineChartMontsLabels; let j=index">{{d && d.data[j]}}</td>
             </tr>
         </table>
+
+        <input #newPin type="text" name="change_pin">
+        <button (click)="changePin(newPin.value)"></button>
         <button (click)="dailyData()">CLICK</button>
     </div>
 </div>

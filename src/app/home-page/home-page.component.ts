@@ -4,6 +4,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthService} from '../providers/auth.service';
 import {FirebaseListObservable, AngularFire, FirebaseObjectObservable} from "angularfire2";
+// import {win} from "@angular/platform-browser/src/facade/browser";
 
 @Component({
     selector: 'app-home-page',
@@ -135,4 +136,11 @@ export class HomePageComponent implements OnInit {
         this.router.navigate(['login']);
     }
 
+    changePin(newPin){
+        if (window.confirm('Prajete si skutocne zmenit admin PIN?')){
+            console.log(newPin);
+            let data = this.angularFire.database.object('users/' + this.uid);
+            data.update({ admin_code : newPin });
+        }
+    }
 }
