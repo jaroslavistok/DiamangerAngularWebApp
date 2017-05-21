@@ -19,14 +19,6 @@ import {isNumeric} from "rxjs/util/isNumeric";
 })
 export class RemindersListComponent implements OnInit {
 
-    admincode = "";
-
-    becomeAdmin(value){
-        if (this.admin == this.admincode) {
-            console.log("ok");
-        }
-    }
-
     settings = {
         actions: {
             columnTitle: 'Akcie'
@@ -93,7 +85,7 @@ export class RemindersListComponent implements OnInit {
     items: FirebaseListObservable<any[]>;
     private uid: String;
     private lastReminderIdValue: string;
-    private admin : string;
+    private admin : Boolean;
 
 
     public reminder = new Reminder('', '', '', '', false);
@@ -120,8 +112,15 @@ export class RemindersListComponent implements OnInit {
 
                     this.lastReminderId = angularFire.database.object('/users/' + this.uid);
                     this.lastReminderId.subscribe(snapshot => {
-                        this.admin = snapshot.admin_code;
                         this.lastReminderIdValue = snapshot.last_reminder_id;
+                    });
+
+
+                    let users = this.angularFire.database.object('/users/'+ this.uid);
+                    users.subscribe(snapshot => {
+                        if (snapshot.admin) {
+                            this.admin = true;
+                        }
                     });
 
                 }
@@ -130,6 +129,11 @@ export class RemindersListComponent implements OnInit {
     }
 
     onCreate(event) {
+        if (!this.admin){
+            this.errorMessage = "Nemáš admin práva, odhlás sa a prihlás sa pomocou PIN=u";
+            return event.confirm.reject();
+        }
+
         if (this.validateReminderData(event.newData)) {
 
             let newId = parseInt(this.lastReminderIdValue) + 1;
@@ -147,15 +151,15 @@ export class RemindersListComponent implements OnInit {
     validateReminderData(reminderData) {
         var valid: boolean = true;
         if (reminderData.name.length < 1) {
-            this.errorMessage = "Meno nesmie byt prazdne!";
+            this.errorMessage = "Meno nesmie byť prázdne!";
             valid = false
         }
         if (reminderData.category.length < 1) {
-            this.errorMessage = "Kategoria nesmie byt prazdna";
+            this.errorMessage = "Kategória nesmie byt prázdna";
             valid = false;
         }
         if (!this.validateTime(reminderData.alarmTime)) {
-            this.errorMessage = "Nekorektne zadany cas";
+            this.errorMessage = "Nekorektne zadaný čas";
             valid = false;
         }
         return valid;
@@ -178,6 +182,12 @@ export class RemindersListComponent implements OnInit {
     }
 
     onEdit(event) {
+        if (!this.admin){
+            this.errorMessage = "Nemáš admin práva, odhlás sa a prihlás sa pomocou PIN=u";
+            return event.confirm.reject();
+        }
+
+
         if (this.validateReminderData(event.newData)) {
             let editedReminder = {
                 category: event.newData.category,
@@ -187,9 +197,6 @@ export class RemindersListComponent implements OnInit {
             };
 
             this.items.update(event.data.$key, editedReminder);
-
-            console.log("on update");
-
             this.errorMessage = "";
             return event.confirm.resolve(event.data);
         }
@@ -198,7 +205,12 @@ export class RemindersListComponent implements OnInit {
     }
 
     onDelete(event) {
-        if (window.confirm('Prajete si skutocne odstranit zaznam?')) {
+        if (!this.admin){
+            this.errorMessage = "Nemáš admin práva, odhlás sa a prihlás sa pomocou PIN=u";
+            return event.confirm.reject();
+        }
+
+        if (window.confirm('Prajete si skutočne odstrániť záznam?')) {
             this.items.remove(event.data);
             return event.confirm.resolve(event.data);
         }

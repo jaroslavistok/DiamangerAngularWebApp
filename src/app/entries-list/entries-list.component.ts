@@ -96,6 +96,7 @@ export class EntriesListComponent implements OnInit {
 
     tableData: LocalDataSource;
     public errorMessage: string = "";
+    private admin: boolean;
 
 
     addValue() {
@@ -117,6 +118,14 @@ export class EntriesListComponent implements OnInit {
                     this.items.subscribe(snapshot => {
                         this.tableData = new LocalDataSource(snapshot);
                     });
+
+
+                    let users = this.angularFire.database.object('/users/'+ this.uid);
+                    users.subscribe(snapshot => {
+                        if (snapshot.admin) {
+                            this.admin = true;
+                        }
+                    });
                 }
             }
         );
@@ -135,6 +144,11 @@ export class EntriesListComponent implements OnInit {
 
 
     onCreate(event) {
+        if (!this.admin){
+            this.errorMessage = "Nemáš admin práva, odhlás sa a prihlás sa pomocou PIN=u";
+            return event.confirm.reject();
+        }
+
         if (this.validateEntryData(event.newData)) {
             if (event.newData.time != null) {
                 event.newData.time = this.getCurrentTime();
@@ -152,7 +166,11 @@ export class EntriesListComponent implements OnInit {
     }
 
     onEdit(event) {
-        console.log(event.newData);
+        if (!this.admin){
+            this.errorMessage = "Nemáš admin práva, odhlás sa a prihlás sa pomocou PIN=u";
+            return event.confirm.reject();
+        }
+
         if (this.validateEntryData(event.newData)) {
 
             let editedEntry = {
@@ -174,6 +192,11 @@ export class EntriesListComponent implements OnInit {
     }
 
     onDelete(event) {
+        if (!this.admin){
+            this.errorMessage = "Nemáš admin práva, odhlás sa a prihlás sa pomocou PIN=u";
+            return event.confirm.reject();
+        }
+
         if (window.confirm("Prajete si skutocne zaznam? ")) {
             this.items.remove(event.data);
             return event.confirm.resolve(event.data);

@@ -1,10 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-
-
 import {Router} from '@angular/router';
 import {AuthService} from '../providers/auth.service';
 import {FirebaseListObservable, AngularFire, FirebaseObjectObservable} from "angularfire2";
-// import {win} from "@angular/platform-browser/src/facade/browser";
 
 @Component({
     selector: 'app-home-page',
@@ -13,37 +10,23 @@ import {FirebaseListObservable, AngularFire, FirebaseObjectObservable} from "ang
 })
 export class HomePageComponent implements OnInit {
 
-    public lineChartData: Array<any> = [
-        // {data: [65, 59, 80, 81, 56, 55, 40, 30, 40, 60, 40], label: 'Series A'},
-        // {data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'},
-        // {data: [18, 48, 45, 9, 10, 27, 40], label: 'Series C'}
-    ];
-
-    public lineChartMonthsLabels: Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    public lineChartData: Array<any> = [];
     public lineChartMonthDaysLabels: Array<any> = [];
-
-
-    public populateMonthDaysLabels() {
-        for (let i = 1; i <= 10; i++){
-            this.lineChartMonthDaysLabels.push(i.toString())
-        }
-    }
 
     public dailyData() {
         this.items.subscribe(snapshot => {
-            var items = [];
-
+            let items = [];
+            let i = 1;
             snapshot.forEach(item => {
                 items.push(parseInt(item.glucoseValue));
                 console.log(item.glucoseValue);
                 console.log("deefjbe");
+                this.lineChartMonthDaysLabels.push(i.toString())
+                i++;
             });
-
-            var data = {data: items, label: 'Test 1'};
+            let data = {data: items, label: 'Test 1'};
             this.lineChartData.push(data);
-
             this.dataLoaded = true;
-            console.log("loading data");
         });
     }
 
@@ -55,7 +38,7 @@ export class HomePageComponent implements OnInit {
     private dataLoaded: boolean;
 
     public lineChartColors: Array<any> = [
-        { // grey
+        {
             backgroundColor: 'rgba(148,159,177,0.2)',
             borderColor: 'rgba(148,159,177,1)',
             pointBackgroundColor: 'rgba(148,159,177,1)',
@@ -63,7 +46,7 @@ export class HomePageComponent implements OnInit {
             pointHoverBackgroundColor: '#fff',
             pointHoverBorderColor: 'rgba(148,159,177,0.8)'
         },
-        { // dark grey
+        {
             backgroundColor: 'rgba(77,83,96,0.2)',
             borderColor: 'rgba(77,83,96,1)',
             pointBackgroundColor: 'rgba(77,83,96,1)',
@@ -71,7 +54,7 @@ export class HomePageComponent implements OnInit {
             pointHoverBackgroundColor: '#fff',
             pointHoverBorderColor: 'rgba(77,83,96,1)'
         },
-        { // grey
+        {
             backgroundColor: 'rgba(148,159,177,0.2)',
             borderColor: 'rgba(148,159,177,1)',
             pointBackgroundColor: 'rgba(148,159,177,1)',
@@ -83,7 +66,7 @@ export class HomePageComponent implements OnInit {
     public lineChartLegend: boolean = true;
     public lineChartType: string = 'line';
 
-
+    // generates random graph data
     public randomize(): void {
         let _lineChartData: Array<any> = new Array(this.lineChartData.length);
         for (let i = 0; i < this.lineChartData.length; i++) {
@@ -98,17 +81,12 @@ export class HomePageComponent implements OnInit {
         this.lineChartData = _lineChartData;
     }
 
-    // events
-    public chartClicked(e: any): void {
-        console.log(e);
-    }
-
-    public chartHovered(e: any): void {
-        console.log(e);
-    }
 
     private uid: String;
     private items: FirebaseListObservable<any[]>;
+    private admin: Boolean = false;
+
+    private errorMessage: String = "";
 
     constructor(public authService: AuthService, private router: Router, private angularFire: AngularFire) {
         this.authService.angularFire.auth.subscribe(
@@ -120,11 +98,15 @@ export class HomePageComponent implements OnInit {
                     this.dataLoaded = false;
                     this.items = angularFire.database.list('/users/' + this.uid + "/items");
                     this.dailyData();
-
+                    let users = this.angularFire.database.object('/users/'+ this.uid);
+                    users.subscribe(snapshot => {
+                        if (snapshot.admin) {
+                            this.admin = true;
+                        }
+                    });
                 }
             }
         );
-        this.populateMonthDaysLabels();
     }
 
     ngOnInit() {
@@ -137,6 +119,12 @@ export class HomePageComponent implements OnInit {
     }
 
     changePin(newPin){
+        if (!this.admin){
+            this.errorMessage = "Nemáš admin práva, odhlás sa a prihlás sa pomocou PIN=u";
+            return;
+        }
+
+
         if (window.confirm('Prajete si skutocne zmenit admin PIN?')){
             console.log(newPin);
             let data = this.angularFire.database.object('users/' + this.uid);
