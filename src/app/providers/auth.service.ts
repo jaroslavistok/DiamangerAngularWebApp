@@ -15,7 +15,9 @@ export class AuthService {
           password: userPassword
       }).then((user)=> {
           return this.angularFire.database.object(`/users/${user.uid}`).update({
-              email: userEmail
+              email: userEmail,
+              admin: false,
+              admin_code: '0000'
           });
       });
   }
