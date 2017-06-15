@@ -5,8 +5,6 @@ import {FirebaseListObservable, AngularFire, FirebaseObjectObservable} from "ang
 import {Reminder} from './Reminder';
 import {Ng2SmartTableModule, LocalDataSource} from "ng2-smart-table";
 import {CheckBoxComponentComponent} from "../check-box-component/check-box-component.component";
-import {min} from "rxjs/operator/min";
-import {isNumber} from "util";
 import {isNumeric} from "rxjs/util/isNumeric";
 
 @Component({

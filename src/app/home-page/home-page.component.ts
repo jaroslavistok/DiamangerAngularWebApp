@@ -24,7 +24,7 @@ export class HomePageComponent implements OnInit {
                 this.lineChartMonthDaysLabels.push(i.toString())
                 i++;
             });
-            let data = {data: items, label: 'Test 1'};
+            let data = {data: items, label: 'Glykémie'};
             this.lineChartData.push(data);
             this.dataLoaded = true;
         });
